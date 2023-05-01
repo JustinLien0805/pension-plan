@@ -25,7 +25,7 @@ const App = () => {
 
     const expectedDeathAge = gender === "male" ? 78 : 85;
     const remainingYears = expectedDeathAge - age;
-    const totalPension1 = remainingYears * pension1;
+    const totalPension1 = remainingYears * 12 * pension1;
 
     const recommendation =
       totalPension1 > pension2 ? "老年年金給付" : "老年一次金給付";
