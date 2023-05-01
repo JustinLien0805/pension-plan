@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./App.css";
 const App = () => {
   const [age, setAge] = useState("");
+  const [gender, setGender] = useState("");
   const [insuranceYears, setInsuranceYears] = useState("");
   const [averageMonthlyWage, setAverageMonthlyWage] = useState("");
   const [results, setResults] = useState({});
@@ -22,13 +23,17 @@ const App = () => {
       pension2 *= 1 + 0.04 * Math.min(ageDiff, 5);
     }
 
-    // if (age >= 60 && insuranceYears > 15) {
-    //   pension2 = averageMonthlyWage * (15 * 1 + (insuranceYears - 15) * 2);
-    // }
+    const expectedDeathAge = gender === "male" ? 78 : 85;
+    const remainingYears = expectedDeathAge - age;
+    const totalPension1 = remainingYears * pension1;
+
+    const recommendation =
+      totalPension1 > pension2 ? "老年年金給付" : "老年一次金給付";
 
     setResults({
       pension1,
       pension2,
+      recommendation,
     });
   };
 
@@ -43,6 +48,14 @@ const App = () => {
             value={age}
             onChange={(e) => setAge(e.target.value)}
           />
+        </div>
+        <div>
+          <label>性別: </label>
+          <select value={gender} onChange={(e) => setGender(e.target.value)}>
+            <option value="">請選擇</option>
+            <option value="male">男性</option>
+            <option value="female">女性</option>
+          </select>
         </div>
         <div>
           <label>保險年資: </label>
@@ -63,10 +76,12 @@ const App = () => {
         <button type="submit">計算</button>
       </form>
       {results.pension1 && (
-        <div>
+        <div className="result">
           <h2>結果</h2>
           <p>老年年金給付: {results.pension1.toFixed(2)}</p>
           <p>老年一次金給付: {results.pension2.toFixed(2)}</p>
+          <h2>建議</h2>
+          <p>建議選擇：{results.recommendation}</p>
         </div>
       )}
     </div>
