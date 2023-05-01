@@ -11,17 +11,21 @@ const App = () => {
     e.preventDefault();
 
     // 計算年金：取最大
-    const pension1 = Math.max(
+    let pension1 = Math.max(
       averageMonthlyWage * insuranceYears * 0.00775 + 3000,
       averageMonthlyWage * insuranceYears * 0.0155
     );
-    // 計算一次金
-    let pension2 = averageMonthlyWage * insuranceYears;
     // 展延年金計算
     const ageDiff = age - 63;
     if (ageDiff > 0) {
-      pension2 *= 1 + 0.04 * Math.min(ageDiff, 5);
+      pension1 *= 1 + 0.04 * Math.min(ageDiff, 5);
+    // 減給年金計算
+    } else if (ageDiff < 0) {
+      pension1 *= 1 - 0.04 * Math.min(Math.abs(ageDiff), 5);
     }
+
+    // 計算一次金
+    let pension2 = averageMonthlyWage * insuranceYears;
 
     const expectedDeathAge = gender === "male" ? 78 : 85;
     const remainingYears = expectedDeathAge - age;
@@ -30,8 +34,14 @@ const App = () => {
     const recommendation =
       totalPension1 > pension2 ? "老年年金給付" : "老年一次金給付";
 
+    console.log({
+      totalPension1,
+      pension2,
+      recommendation,
+    });
+
     setResults({
-      pension1,
+      totalPension1,
       pension2,
       recommendation,
     });
@@ -75,10 +85,10 @@ const App = () => {
         </div>
         <button type="submit">計算</button>
       </form>
-      {results.pension1 && (
+      {results.totalPension1 && (
         <div className="result">
           <h2>結果</h2>
-          <p>老年年金給付: {results.pension1.toFixed(2)}</p>
+          <p>老年年金給付: {results.totalPension1.toFixed(2)}</p>
           <p>老年一次金給付: {results.pension2.toFixed(2)}</p>
           <h2>建議</h2>
           <p>建議選擇：{results.recommendation}</p>
