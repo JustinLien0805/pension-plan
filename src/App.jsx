@@ -15,8 +15,12 @@ const App = () => {
       averageMonthlyWage * insuranceYears * 0.0155
     );
     // 計算一次金
-    let pension2 = 0;
-    pension2 = averageMonthlyWage * insuranceYears;
+    let pension2 = averageMonthlyWage * insuranceYears;
+    // 展延年金計算
+    const ageDiff = age - 63;
+    if (ageDiff > 0) {
+      pension2 *= 1 + 0.04 * Math.min(ageDiff, 5);
+    }
     
     // if (age >= 60 && insuranceYears > 15) {
     //   pension2 = averageMonthlyWage * (15 * 1 + (insuranceYears - 15) * 2);
