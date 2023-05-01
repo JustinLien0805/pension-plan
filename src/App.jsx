@@ -9,15 +9,18 @@ const App = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // 計算年金：取最大
     const pension1 = Math.max(
       averageMonthlyWage * insuranceYears * 0.00775 + 3000,
       averageMonthlyWage * insuranceYears * 0.0155
     );
-
+    // 計算一次金
     let pension2 = 0;
-    if (age >= 60 && insuranceYears > 15) {
-      pension2 = averageMonthlyWage * (15 * 1 + (insuranceYears - 15) * 2);
-    }
+    pension2 = averageMonthlyWage * insuranceYears;
+    
+    // if (age >= 60 && insuranceYears > 15) {
+    //   pension2 = averageMonthlyWage * (15 * 1 + (insuranceYears - 15) * 2);
+    // }
 
     setResults({
       pension1,
