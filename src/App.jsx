@@ -21,7 +21,7 @@ const App = () => {
     if (ageDiff > 0) {
       pension2 *= 1 + 0.04 * Math.min(ageDiff, 5);
     }
-    
+
     // if (age >= 60 && insuranceYears > 15) {
     //   pension2 = averageMonthlyWage * (15 * 1 + (insuranceYears - 15) * 2);
     // }
@@ -34,6 +34,7 @@ const App = () => {
 
   return (
     <div className="main">
+      <h1>年金 一次金計算</h1>
       <form onSubmit={handleSubmit}>
         <div>
           <label>年齡: </label>
