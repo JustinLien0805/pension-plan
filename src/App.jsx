@@ -19,13 +19,16 @@ const App = () => {
     const ageDiff = age - 63;
     if (ageDiff > 0) {
       pension1 *= 1 + 0.04 * Math.min(ageDiff, 5);
-    // 減給年金計算
+      // 減給年金計算
     } else if (ageDiff < 0) {
       pension1 *= 1 - 0.04 * Math.min(Math.abs(ageDiff), 5);
     }
 
     // 計算一次金
     let pension2 = averageMonthlyWage * insuranceYears;
+
+    // 計算幾個月年金會超過一次金
+    const exceedMonth = Math.ceil(pension2 / pension1);
 
     const expectedDeathAge = gender === "male" ? 78 : 85;
     const remainingYears = expectedDeathAge - age;
@@ -35,14 +38,18 @@ const App = () => {
       totalPension1 > pension2 ? "老年年金給付" : "老年一次金給付";
 
     console.log({
+      pension1,
       totalPension1,
+      exceedMonth,
       pension2,
       recommendation,
     });
 
     setResults({
+      pension1,
       totalPension1,
       pension2,
+      exceedMonth,
       recommendation,
     });
   };
@@ -88,10 +95,10 @@ const App = () => {
       {results.totalPension1 && (
         <div className="result">
           <h2>結果</h2>
-          <p>老年年金給付: {results.totalPension1.toFixed(2)}</p>
+          <p>年金月領給付: {results.pension1.toFixed(2)}</p>
           <p>老年一次金給付: {results.pension2.toFixed(2)}</p>
-          <h2>建議</h2>
-          <p>建議選擇：{results.recommendation}</p>
+          <p>年金超過一次金的月份: {results.exceedMonth} 個月</p>
+          <p>年金預計總額: {results.totalPension1.toFixed(2)}</p>
         </div>
       )}
     </div>
