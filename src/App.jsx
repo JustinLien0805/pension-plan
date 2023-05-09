@@ -14,7 +14,6 @@ const App = () => {
     let sum = 0;
     for (let i = 0; i <= year; i++) {
       sum += value * 12 * Math.pow(1 / (1 + 0.01), i);
-      console.log(sum);
     }
     return sum;
   }
@@ -27,6 +26,7 @@ const App = () => {
       averageMonthlyWage * insuranceYears * 0.00775 + 3000,
       averageMonthlyWage * insuranceYears * 0.0155
     );
+
     // 展延年金計算
     const ageDiff = age - 63;
     if (ageDiff > 0) {
@@ -36,14 +36,20 @@ const App = () => {
       pension1 *= 1 - 0.04 * Math.min(Math.abs(ageDiff), 5);
     }
 
+
     // 計算一次金
     let pension2 = averageMonthlyWage * insuranceYears;
 
     // 計算一次領
     let pension3 = 0;
     if (insuranceYears > 15) {
-      pension3 =
-        averageMonthlyWage * Math.min(15 * 1 + (insuranceYears - 15) * 2, 45);
+      if (retireAge > 60) {
+        pension3 =
+          averageMonthlyWage * Math.min(15 * 1 + (insuranceYears - 15) * 2, 50);
+      } else {
+        pension3 =
+          averageMonthlyWage * Math.min(15 * 1 + (insuranceYears - 15) * 2, 45);
+      }
     } else {
       pension3 = averageMonthlyWage * insuranceYears;
     }
