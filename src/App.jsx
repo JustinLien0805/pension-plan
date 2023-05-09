@@ -26,16 +26,17 @@ const App = () => {
       averageMonthlyWage * insuranceYears * 0.00775 + 3000,
       averageMonthlyWage * insuranceYears * 0.0155
     );
-
+    console.log(pension1);
     // 展延年金計算
-    const ageDiff = age - 63;
+    const ageDiff = retireAge - 63;
+    console.log(ageDiff);
     if (ageDiff > 0) {
       pension1 *= 1 + 0.04 * Math.min(ageDiff, 5);
       // 減給年金計算
     } else if (ageDiff < 0) {
       pension1 *= 1 - 0.04 * Math.min(Math.abs(ageDiff), 5);
     }
-
+    console.log(pension1);
 
     // 計算一次金
     let pension2 = averageMonthlyWage * insuranceYears;
