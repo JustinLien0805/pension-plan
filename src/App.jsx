@@ -1,11 +1,23 @@
 import React, { useState } from "react";
+import { maleAge, femaleAge } from "./utils/AgeArray";
 import "./App.css";
 const App = () => {
   const [age, setAge] = useState("");
+  const [retireAge, setRetireAge] = useState("");
   const [gender, setGender] = useState("");
   const [insuranceYears, setInsuranceYears] = useState("");
   const [averageMonthlyWage, setAverageMonthlyWage] = useState("");
   const [results, setResults] = useState({});
+
+  // 總年金現值計算
+  function presentValue(value, year) {
+    let sum = 0;
+    for (let i = 0; i <= year; i++) {
+      sum += value * 12 * Math.pow(1 / (1 + 0.01), i);
+      console.log(sum);
+    }
+    return sum;
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -27,29 +39,37 @@ const App = () => {
     // 計算一次金
     let pension2 = averageMonthlyWage * insuranceYears;
 
-    // 計算幾個月年金會超過一次金
-    const exceedMonth = Math.ceil(pension2 / pension1);
+    // 計算一次領
+    let pension3 = 0;
+    if (insuranceYears > 15) {
+      pension3 =
+        averageMonthlyWage * Math.min(15 * 1 + (insuranceYears - 15) * 2, 45);
+    } else {
+      pension3 = averageMonthlyWage * insuranceYears;
+    }
 
-    const expectedDeathAge = gender === "male" ? 78 : 85;
-    const remainingYears = expectedDeathAge - age;
-    const totalPension1 = remainingYears * 12 * pension1;
+    // 總年金計算
+    const remainingYears =
+      gender === "male" ? maleAge[retireAge] : femaleAge[retireAge];
 
-    const recommendation =
-      totalPension1 > pension2 ? "老年年金給付" : "老年一次金給付";
+    // 現值計算
+    const pv = presentValue(pension1, Math.round(remainingYears));
+
+    const recommendation = pv > pension2 ? "老年年金給付" : "老年一次金給付";
 
     console.log({
       pension1,
-      totalPension1,
-      exceedMonth,
+      pv,
       pension2,
+      pension3,
       recommendation,
     });
 
     setResults({
       pension1,
-      totalPension1,
+      pv,
       pension2,
-      exceedMonth,
+      pension3,
       recommendation,
     });
   };
@@ -64,6 +84,14 @@ const App = () => {
             type="number"
             value={age}
             onChange={(e) => setAge(e.target.value)}
+          />
+        </div>
+        <div>
+          <label>預計退休年齡: </label>
+          <input
+            type="number"
+            value={retireAge}
+            onChange={(e) => setRetireAge(e.target.value)}
           />
         </div>
         <div>
@@ -92,13 +120,13 @@ const App = () => {
         </div>
         <button type="submit">計算</button>
       </form>
-      {results.totalPension1 && (
+      {results.pv && (
         <div className="result">
           <h2>結果</h2>
           <p>年金月領給付: {results.pension1.toFixed(2)}</p>
           <p>老年一次金給付: {results.pension2.toFixed(2)}</p>
-          <p>年金超過一次金的月份: {results.exceedMonth} 個月</p>
-          <p>年金預計總額: {results.totalPension1.toFixed(2)}</p>
+          <p>老年一次領給付: {results.pension3}</p>
+          <p>年金預計總額: {results.pv.toFixed(2)}</p>
         </div>
       )}
     </div>

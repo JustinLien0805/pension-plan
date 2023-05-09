@@ -10,14 +10,25 @@
 form {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: start;
+  align-items: start;
   gap: 1em;
+  width: 400px;
+  padding: 1rem;
+  border-radius: 5px;
 }
 
+form > button {
+  width: 100%;
+}
+
+input {
+  width: 100%;
+}
 .result {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
+
