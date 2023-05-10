@@ -57,7 +57,7 @@ const App = () => {
 
     // 總年金計算
     const remainingYears =
-      gender === "male" ? maleAge[retireAge] : femaleAge[retireAge];
+      gender === "male" ? maleAge[age] : femaleAge[retireAge];
 
     // 現值計算
     const pv = presentValue(pension1, Math.round(remainingYears));
