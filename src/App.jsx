@@ -36,6 +36,10 @@ const App = () => {
     } else if (ageDiff < 0) {
       pension1 *= 1 - 0.04 * Math.min(Math.abs(ageDiff), 5);
     }
+
+    if (insuranceYears < 15) {
+      pension1 = "無法領取年金";
+    }
     console.log(pension1);
 
     // 計算一次金
@@ -57,7 +61,7 @@ const App = () => {
 
     // 總年金計算
     const remainingYears =
-      gender === "male" ? maleAge[age] : femaleAge[retireAge];
+      gender === "male" ? maleAge[retireAge] : femaleAge[retireAge];
 
     // 現值計算
     const pv = presentValue(pension1, Math.round(remainingYears));
